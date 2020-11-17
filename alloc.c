@@ -33,8 +33,8 @@ int cleanup() {
 char *alloc(int size) {
 	int need_chunk, chunk_length, found, start, i;
 
-	// 최소 8byte
-	if (size < MINALLOC) {
+	// 최소 8byte, 최대 4KB
+	if (size < MINALLOC || size > PAGESIZE) {
 		return NULL;
 	}
 	
@@ -64,7 +64,7 @@ char *alloc(int size) {
 			break;
 		}
 	}
-	// 발견
+	// 발견했으면 주소를 리턴
 	if (found != -1) {
 		i = found;
 		while(mm[i].endpoint != 1) {
@@ -73,6 +73,7 @@ char *alloc(int size) {
 		mm[i].used = 1;
 		return base_addr + found * MINALLOC;
 	}
+	// 할당할 여유 공간이 부족함
 	else {
 		return NULL;
 	}
