@@ -105,6 +105,5 @@ void dealloc(char *addr) {
 	mm[i].used = 0;
 	mm[i].endpoint = 0;
 
-	printf("dealloc %d bytes\n", size);
 	memset(addr, 0, size);
 }

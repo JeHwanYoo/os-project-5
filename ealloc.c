@@ -9,7 +9,6 @@ typedef struct page {
 	int size;
 	int alloc;
 	char *base_addr;
-	CK *mm_front;
 	CK mm[PAGESIZE/MINALLOC];
 } PG;
 
