@@ -96,13 +96,15 @@ void dealloc(char *addr) {
 
 	// chunk 초기화
 	i = offset;
-	size = 1;
+	size = 0;
 	while (!mm[i].endpoint) {
 		mm[i++].used = 0;
-		size++;
+		size+=MINALLOC;
 	}
+	size+=MINALLOC;
 	mm[i].used = 0;
 	mm[i].endpoint = 0;
 
+	printf("dealloc %d bytes\n", size);
 	memset(addr, 0, size);
 }
