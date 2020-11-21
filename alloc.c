@@ -8,7 +8,6 @@ struct chunk {
 struct chunk mm[PAGESIZE/MINALLOC];
 
 char *base_addr = NULL; // 페이지 시작 주소
-struct chunk *mm_front = NULL;
 
 // mmap(2) OS 4KB 을 통해 에서 페이지를 할당하고 필요한 다른 데이터 구조를 초기화하는 등 
 // 메모리 관리자 초기화 이 함수는 메모리 관리자에게 메모리를 요청하기 전에 사용자가 호출 
@@ -83,6 +82,12 @@ char *alloc(int size) {
 void dealloc(char *addr) {
 	int offset, size, i;	
 	offset = (addr - base_addr) / MINALLOC;
+	
+	// 계산시 offset은 청크의 index 범위내에 존재하여야함 
+	if (offset >= PAGESIZE/MINALLOC || offset < 0) {
+		printf("%d\n", offset);
+		return;
+	}
 
 	// 할당되지 않은 메모리를 초기화 할 경우
 	if (mm[offset].used == 0) {
